@@ -1,11 +1,11 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, 'Helvetica Neue';
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #212124;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   width: 100%;
+
+  --color-dropdown: #7d7f82;
+  --color-secondary-light: #38393d;
+  --color-secondary: #36373a;
 }
 
 body {

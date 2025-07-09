@@ -1,3 +1,9 @@
+import Header from '@/components/features/flight/header/Header';
+
 export default function FlightContainer() {
-  return <div>Flight Container</div>;
+  return (
+    <div>
+      <Header />
+    </div>
+  );
 }
