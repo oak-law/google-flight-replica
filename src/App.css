@@ -1,7 +1,35 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   height: 100%;
   width: 100%;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+/* ==== MUI Custom Changes ==== */
+/* .MuiList-root { */
+.MuiInputBase-root,
+.MuiAutocomplete-root {
+  background-color: transparent;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  color: #9aa0a6;
+}
+
+.MuiPaper-root,
+.MuiList-root,
+.MuiFormControl-root,
+.MuiPickersInputBase-root,
+.MuiPickersSectionList-root,
+.MuiMenu-list {
+  background-color: #36373a;
+  color: #9aa0a6;
+  outline: none;
+}
+
+.MuiSvgIcon-root {
+  color: #9aa0a6;
 }
