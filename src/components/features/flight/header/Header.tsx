@@ -1,10 +1,16 @@
-import './Header.css';
+import { Box, Typography } from '@mui/material';
+import { containerStyle, h1Style } from './Header.styles';
+import type { GenericProps } from '@/types';
 
-export default function Header() {
+export default function Header({ sx }: GenericProps) {
+  const boxStyle = { ...containerStyle, ...sx };
+
   return (
-    <div id="header">
+    <Box id="header" sx={boxStyle}>
       <img src="/img/header.svg" />
-      <h1>Flights</h1>
-    </div>
+      <Typography sx={h1Style} variant="h1">
+        Flights
+      </Typography>
+    </Box>
   );
 }
