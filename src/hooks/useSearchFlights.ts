@@ -1,8 +1,8 @@
 import { apiClient } from '@/api';
+// Uncomment for testing, as API has max requests per month
+import { airportsMock } from '@/mocks/airports';
 import { useEffect, useState } from 'react';
 
-// Uncomment for testing, as API has max requests per month
-// import { airportsMock } from '@/mocks/airports';
 import { type AirportProps } from '@/types';
 
 export const useSearchFlights = (query: string) => {
@@ -30,9 +30,9 @@ export const useSearchFlights = (query: string) => {
     };
 
     const timeoutId = setTimeout(() => {
-      fetchFlights();
+      // fetchFlights();
       // Comment above and uncomment below for testing, as API has max requests per month
-      // setFlights(airportsMock);
+      setFlights(airportsMock);
     }, 500);
 
     return () => {

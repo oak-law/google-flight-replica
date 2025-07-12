@@ -1,4 +1,5 @@
 import { apiClient } from '@/api';
+import { flightsMock } from '@/mocks/flights';
 import { useEffect, useState } from 'react';
 
 import { type FlightProps, type GetFlightsParams } from '@/types';
@@ -56,7 +57,7 @@ export const useGetFlights = (requestFilter: GetFlightsParams | null) => {
     const timeoutId = setTimeout(() => {
       fetchFlights();
       // Comment above and uncomment below for testing, as API has max requests per month
-      // setFlights(flightsMock);
+      setFlights(flightsMock);
     }, 500);
 
     return () => {

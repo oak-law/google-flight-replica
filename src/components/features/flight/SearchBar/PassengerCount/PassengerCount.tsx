@@ -96,7 +96,11 @@ export default function PassengerCount({
       >
         {options.map((option) => (
           <MenuItem key={option.key} value={option.value}>
-            <ListItemText primary={option.label} />
+            <ListItemText
+              primary={option.label}
+              secondary={option.subLabel}
+              slotProps={{ secondary: { sx: { color: 'secondary.main' } } }}
+            />
             <Stack
               direction="row"
               spacing={1}
