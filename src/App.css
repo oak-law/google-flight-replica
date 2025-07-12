@@ -16,17 +16,25 @@
   background-color: transparent;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  color: #9aa0a6;
+  color: whitesmoke;
 }
 
 .MuiPaper-root,
 .MuiList-root,
-.MuiFormControl-root,
 .MuiPickersInputBase-root,
 .MuiPickersSectionList-root,
+.MuiPickersLayout-root,
 .MuiMenu-list {
   background-color: #36373a;
-  color: #9aa0a6;
+  /* color: #9aa0a6; */
+  color: whitesmoke;
+  outline: none;
+}
+
+.MuiFormControl-root,
+.MuiInputBase-root {
+  background-color: transparent;
+  color: whitesmoke;
   outline: none;
 }
 

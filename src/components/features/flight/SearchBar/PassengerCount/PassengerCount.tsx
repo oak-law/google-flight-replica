@@ -1,4 +1,8 @@
-import { useMemo } from 'react';
+import { StyledFormControl, StyledSelect } from '@/components/common/Select';
+import { noop } from '@/constants';
+import Add from '@mui/icons-material/Add';
+import Person from '@mui/icons-material/Person';
+import Remove from '@mui/icons-material/Remove';
 import {
   IconButton,
   InputAdornment,
@@ -6,21 +10,11 @@ import {
   MenuItem,
   Stack,
 } from '@mui/material';
-import Add from '@mui/icons-material/Add';
-import Person from '@mui/icons-material/Person';
-import Remove from '@mui/icons-material/Remove';
+import { useMemo } from 'react';
 
-import { noop } from '@/constants';
-import { type GenericOptionProps } from '@/types';
+import { type GenericOptionProps, type PassengerCountData } from '@/types';
+
 import { iconStyles } from './PassengerCount.styles';
-import { StyledFormControl, StyledSelect } from '@/components/common/Select';
-
-export interface PassengerCountData {
-  adults: number;
-  children: number;
-  infantsInSeat: number;
-  infantsOnLap: number;
-}
 
 interface PassengerCountProps {
   value: PassengerCountData;
@@ -103,7 +97,11 @@ export default function PassengerCount({
         {options.map((option) => (
           <MenuItem key={option.key} value={option.value}>
             <ListItemText primary={option.label} />
-            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ alignItems: 'center', ml: 5 }}
+            >
               <IconButton
                 aria-label="add-button"
                 sx={iconStyles}

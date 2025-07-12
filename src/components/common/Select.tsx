@@ -1,13 +1,13 @@
-import { type ReactNode } from 'react';
 import {
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select as MUISelect,
   InputAdornment,
+  InputLabel,
+  Select as MUISelect,
   type SelectProps as MUISelectProps,
+  MenuItem,
   styled,
 } from '@mui/material';
+import { type ReactNode } from 'react';
 
 import type { GenericOptionProps } from '@/types';
 
@@ -30,8 +30,8 @@ export const StyledFormControl = styled(FormControl, {
 export const StyledSelect = styled(MUISelect, {
   shouldForwardProp: (prop) => prop !== 'success',
 })(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
-  color: theme.palette.secondary.main,
+  backgroundColor: 'transparent',
+  color: 'whitesmoke',
   paddingBottom: '4px',
   paddingLeft: '10px',
   paddingRight: '10px',
@@ -51,11 +51,12 @@ export default function Select<T = string>({
   label,
   labelId = 'default-select-label',
   options,
+  sx,
   value,
   onSelect,
 }: SelectProps<T>) {
   return (
-    <StyledFormControl variant="standard" size="small">
+    <StyledFormControl sx={sx} variant="standard" size="small">
       {label && <InputLabel id={labelId}>{label}</InputLabel>}
       <StyledSelect
         id={id}

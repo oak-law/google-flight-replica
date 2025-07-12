@@ -1,3 +1,5 @@
+import { ticketTypeOptions, tripTypeOptions } from '@/constants';
+import Select from '@common/Select';
 import {
   ArrowRightAlt,
   FmdGood,
@@ -6,37 +8,44 @@ import {
   SwapHoriz,
   SyncAlt,
 } from '@mui/icons-material';
-import { Box, Divider, Fab, Grid, Stack } from '@mui/material';
+import {
+  Alert,
+  type AlertProps,
+  Box,
+  Divider,
+  Fab,
+  Grid,
+  Snackbar,
+  Stack,
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
-import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { useMemo, useState } from 'react';
 
-import Select from '@common/Select';
-import { ticketTypeOptions, tripTypeOptions } from '@/constants';
-import { type GenericProps, TicketType, TripType } from '@/types';
-
-import { containerStyle } from './SearchBar.styles';
-import PassengerCount, {
+import {
+  type GenericProps,
+  type GetFlightsParams,
   type PassengerCountData,
-} from './PassengerCount/PassengerCount';
+  TicketType,
+  TripType,
+} from '@/types';
 
-import AirportAutoComplete from './AirportAutocomplete/AirportAutoComplete';
+import { formatDate } from '@/utils/date.utils';
 
-interface ExploreProps {
-  tripType: TripType;
-  passengers: PassengerCountData;
-  ticketType: TicketType;
-  returnDate: Date;
-  depatureDate: Date;
-}
+import AirportAutoComplete, {
+  type AirportItem,
+} from './AirportAutocomplete/AirportAutoComplete';
+import PassengerCount from './PassengerCount/PassengerCount';
+import { containerStyle } from './SearchBar.styles';
 
 interface SearchBarProps extends GenericProps {
-  onExplore: (explore: ExploreProps) => void;
+  onExplore: (explore: GetFlightsParams) => void;
 }
 
 export default function SearchBar({ sx, onExplore }: SearchBarProps) {
   const boxStyle = { ...containerStyle, ...sx };
+  const defaultDepartureDate = dayjs(new Date());
 
   const [passengers, setPassengers] = useState<PassengerCountData>({
     adults: 0,
@@ -44,8 +53,21 @@ export default function SearchBar({ sx, onExplore }: SearchBarProps) {
     infantsInSeat: 0,
     infantsOnLap: 0,
   });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarInfo, setSnackbarInfo] = useState<{
+    severity: AlertProps['severity'];
+    message: string;
+  }>({
+    message: '',
+    severity: 'warning',
+  });
+
+  const [origin, setOrigin] = useState<AirportItem | null>(null);
+  const [destination, setDestination] = useState<AirportItem | null>(null);
   const [returnDate, setReturnDate] = useState<PickerValue | null>(null);
-  const [depatureDate, setDepatureDate] = useState<PickerValue | null>(null);
+  const [depatureDate, setDepatureDate] = useState<PickerValue | null>(
+    defaultDepartureDate
+  );
   const [ticketType, setTicketType] = useState<TicketType>(TicketType.ECONOMY);
   const [tripType, setTripType] = useState<TripType>(TripType.ROUND_TRIP);
 
@@ -59,13 +81,46 @@ export default function SearchBar({ sx, onExplore }: SearchBarProps) {
     }
   }, [tripType]);
 
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
   const handleExplore = () => {
+    if (origin === null) {
+      setSnackbarInfo({
+        message: 'Your depature location is needed.',
+        severity: 'warning',
+      });
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (destination === null) {
+      setSnackbarInfo({
+        message: 'Your arrival location is needed.',
+        severity: 'warning',
+      });
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (depatureDate === null) {
+      setSnackbarInfo({
+        message: 'Your depature date is needed.',
+        severity: 'warning',
+      });
+      setOpenSnackbar(true);
+      return;
+    }
+
+    // TODO: Finish validation Provided Data
+
     onExplore({
       tripType,
       passengers,
       ticketType,
-      returnDate: returnDate!.toDate(),
-      depatureDate: depatureDate!.toDate(),
+      origin,
+      destination,
+      returnDate: formatDate(returnDate?.toDate(), 'YYYY-MM-DD'),
+      depatureDate: formatDate(depatureDate!.toDate(), 'YYYY-MM-DD'),
     });
   };
 
@@ -107,7 +162,7 @@ export default function SearchBar({ sx, onExplore }: SearchBarProps) {
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <AirportAutoComplete
               id="roundtrip-start-point"
-              onUpdate={() => {}}
+              onUpdate={setOrigin}
             />
             <Divider>
               <SwapHoriz />
@@ -115,25 +170,50 @@ export default function SearchBar({ sx, onExplore }: SearchBarProps) {
             <AirportAutoComplete
               id="roundtrip-end-point"
               startIcon={<FmdGood />}
-              onUpdate={() => {}}
+              onUpdate={setDestination}
             />
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <DatePicker
-              defaultValue={dayjs(new Date())}
+              name="departure-date"
+              defaultValue={defaultDepartureDate}
               format="ddd, MMM D"
+              sx={{ width: tripType === TripType.ROUND_TRIP ? 'auto' : '100%' }}
               onChange={setDepatureDate}
             />
-            <Divider orientation="vertical" flexItem />
-            <DatePicker
-              value={returnDate}
-              format="ddd, MMM D"
-              onChange={setReturnDate}
-            />
+            {tripType === TripType.ROUND_TRIP && (
+              <>
+                <Divider orientation="vertical" flexItem />
+                <DatePicker
+                  name="arrival-date"
+                  sx={{ backgroundColor: 'transparent' }}
+                  value={returnDate}
+                  format="ddd, MMM D"
+                  onChange={setReturnDate}
+                />
+              </>
+            )}
           </Stack>
         </Grid>
+        {/* TODO: Implement Multiple Stops */}
+        <Fab
+          sx={({ palette }) => ({
+            backgroundColor: palette.info.main,
+            color: palette.background.default,
+            display: 'inline-flex',
+            textTransform: 'none',
+            maxWidth: '110px',
+            '&:hover': {
+              backgroundColor: palette.info.light,
+            },
+          })}
+          variant="extended"
+          onClick={() => {}}
+        >
+          Add Flight
+        </Fab>
       </Grid>
       <Fab
         sx={({ palette }) => ({
@@ -161,6 +241,19 @@ export default function SearchBar({ sx, onExplore }: SearchBarProps) {
         />
         Explore
       </Fab>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarInfo.severity}
+          variant="filled"
+        >
+          {snackbarInfo.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

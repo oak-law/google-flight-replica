@@ -2,13 +2,13 @@ import { apiClient } from '@/api';
 import { useEffect, useState } from 'react';
 
 // Uncomment for testing, as API has max requests per month
-// import { flightsMock } from '@/mocks/flights';
-import { type FlightProps } from '@/types';
+// import { airportsMock } from '@/mocks/airports';
+import { type AirportProps } from '@/types';
 
 export const useSearchFlights = (query: string) => {
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
-  const [flights, setFlights] = useState<FlightProps[]>([]);
+  const [flights, setFlights] = useState<AirportProps[]>([]);
 
   useEffect(() => {
     if (!query) return;
@@ -20,7 +20,7 @@ export const useSearchFlights = (query: string) => {
         const response = await apiClient.get(
           `flights/searchAirport?query=${query}&locale=en-US`
         );
-        const data: FlightProps[] = response.data?.data ?? [];
+        const data: AirportProps[] = response.data?.data ?? [];
         setFlights(data);
       } catch (error) {
         setError(error as Error);
@@ -32,7 +32,7 @@ export const useSearchFlights = (query: string) => {
     const timeoutId = setTimeout(() => {
       fetchFlights();
       // Comment above and uncomment below for testing, as API has max requests per month
-      // setFlights(flightsMock);
+      // setFlights(airportsMock);
     }, 500);
 
     return () => {

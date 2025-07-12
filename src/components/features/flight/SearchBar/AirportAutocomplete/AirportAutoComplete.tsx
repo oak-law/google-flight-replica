@@ -14,7 +14,7 @@ import {
   ListItemText,
   TextField,
 } from '@mui/material';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 
 export interface AirportItem {
   skyId: string;
@@ -58,12 +58,24 @@ export default function AirportAutoComplete({
     <Autocomplete<AirportItem>
       id={id}
       options={options}
-      sx={({ palette }) => ({
-        // backgroundColor: palette.background.default,
-        borderColor: palette.secondary.main,
-        color: palette.secondary.main,
-        width: 300,
-      })}
+      sx={{
+        color: 'whitesmoke',
+        width: '100%',
+      }}
+      slotProps={{
+        paper: {
+          sx: ({ palette }) => ({
+            backgroundColor: palette.background.default,
+            color: 'whitesmoke',
+            minWidth: '120px',
+          }),
+        },
+        listbox: {
+          sx: ({ palette }) => ({
+            borderColor: palette.secondary.main,
+          }),
+        },
+      }}
       autoHighlight
       getOptionLabel={(option) => option.suggestionTitle}
       onInputChange={(_, newValue) => setQuery(newValue)}
@@ -90,6 +102,11 @@ export default function AirportAutoComplete({
             <ListItemText
               primary={`${(option.suggestionTitle, option.subTitle)}`}
               secondary={`${option.flightPlaceType} in ${option.localizedName}`}
+              slotProps={{
+                secondary: {
+                  sx: ({ palette }) => ({ color: palette.secondary.main }),
+                },
+              }}
             />
           </ListItem>
         );
@@ -101,7 +118,7 @@ export default function AirportAutoComplete({
             input: {
               ...params.InputProps,
               sx: ({ palette }) => ({
-                color: palette.secondary.main,
+                color: 'whitesmoke',
                 borderColor: palette.secondary.main,
               }),
               startAdornment: (

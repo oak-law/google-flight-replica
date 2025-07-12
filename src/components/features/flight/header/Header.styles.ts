@@ -1,11 +1,5 @@
 import type { SxProps } from '@mui/material';
 
-export const containerStyle: SxProps = {
-  position: 'relative',
-  minHeight: '144px',
-  width: '100%',
-};
-
 export const h1Style: SxProps = {
   position: 'absolute',
   bottom: 0,

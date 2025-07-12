@@ -17,4 +17,7 @@ export const palette: PaletteOptions = {
   background: {
     default: '#36373A',
   },
+  success: {
+    main: '#81c995',
+  },
 };
