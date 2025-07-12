@@ -198,22 +198,24 @@ export default function SearchBar({ sx, onExplore }: SearchBarProps) {
           </Stack>
         </Grid>
         {/* TODO: Implement Multiple Stops */}
-        <Fab
-          sx={({ palette }) => ({
-            backgroundColor: palette.info.main,
-            color: palette.background.default,
-            display: 'inline-flex',
-            textTransform: 'none',
-            maxWidth: '110px',
-            '&:hover': {
-              backgroundColor: palette.info.light,
-            },
-          })}
-          variant="extended"
-          onClick={() => {}}
-        >
-          Add Flight
-        </Fab>
+        {tripType === TripType.MULTI_CITY && (
+          <Fab
+            sx={({ palette }) => ({
+              backgroundColor: palette.info.main,
+              color: palette.background.default,
+              display: 'inline-flex',
+              textTransform: 'none',
+              maxWidth: '110px',
+              '&:hover': {
+                backgroundColor: palette.info.light,
+              },
+            })}
+            variant="extended"
+            onClick={() => {}}
+          >
+            Add Flight
+          </Fab>
+        )}
       </Grid>
       <Fab
         sx={({ palette }) => ({
